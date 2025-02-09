@@ -9,6 +9,9 @@ const WishlistCard = ({ item, onRemove, onAddToCart }) => {
   const cardRef = useRef(null);
   const [isRemoving, setIsRemoving] = useState(false);
 
+  // ✅ Prevents build errors if item is undefined
+  if (!item) return null;
+
   useEffect(() => {
     gsap.fromTo(
       cardRef.current,
@@ -46,13 +49,21 @@ const WishlistCard = ({ item, onRemove, onAddToCart }) => {
         <FaTimes size={24} />
       </button>
 
-      {/* Product Image */}
-      <img src={item.image} alt={item.name} className="w-36 h-36 object-cover rounded-lg" />
+      {/* Product Image with Fallback */}
+      <img
+        src={item?.image ?? "/fallback.jpg"}
+        alt={item?.name ?? "Unknown Product"}
+        className="w-36 h-36 object-cover rounded-lg"
+      />
 
       {/* Product Name and Price */}
       <div className="flex justify-between w-full">
-        <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
-        <p className="text-gray-600 font-medium text-lg">${item.price}</p>
+        <h3 className="text-lg font-semibold text-gray-900">
+          {item?.name ?? "Unknown Product"}
+        </h3>
+        <p className="text-gray-600 font-medium text-lg">
+          ₹{item?.price ?? "N/A"}
+        </p>
       </div>
 
       {/* Add to Cart Button */}
