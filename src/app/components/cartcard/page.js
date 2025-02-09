@@ -17,7 +17,7 @@ const CartCard = ({ product }) => {
       className="flex items-center gap-4 p-4 border rounded-lg shadow-md bg-white"
     >
       <img 
-        src={product.image || "/placeholder.png"} 
+        src={product.image } 
         alt={product.name || "Product"} 
         className="w-16 h-16 rounded-md object-cover" 
       />
