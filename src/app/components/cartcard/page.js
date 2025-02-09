@@ -3,12 +3,11 @@
 import { useCart } from "@/app/context/cartProvider";
 import { motion } from "framer-motion";
 
-export const dynamic = "force-dynamic"; // Force dynamic rendering
-
 const CartCard = ({ product }) => {
   const { updateCartQuantity, removeFromCart } = useCart();
 
-  if (!product) return <p className="text-gray-500">Loading...</p>;
+  // ✅ Prevent build-time errors
+  if (!product) return null; // Don't render if no product data
 
   const handleDecrease = () => {
     if (product.quantity > 1) {
@@ -28,29 +27,29 @@ const CartCard = ({ product }) => {
       transition={{ duration: 0.4 }}
       className="flex items-center gap-4 p-4 border rounded-lg shadow-md bg-white"
     >
-      {/* Product Image */}
+      {/* Product Image (Prevent Undefined Error) */}
       <img
-        src={product.image || "/fallback.jpg"} // ✅ Use a fallback image
-        alt={product.name || "Product"}
+        src={product?.image || "/fallback.jpg"} // ✅ Use a fallback image
+        alt={product?.name || "Product"}
         className="w-16 h-16 rounded-md object-cover"
       />
 
       {/* Product Info */}
       <div className="flex-1">
-        <h3 className="text-lg font-semibold">{product.name || "Unknown Product"}</h3>
-        <p className="text-gray-600">${product.price || "N/A"}</p>
+        <h3 className="text-lg font-semibold">{product?.name || "Unknown Product"}</h3>
+        <p className="text-gray-600">${product?.price || "N/A"}</p>
       </div>
 
       {/* Quantity Selector */}
       <div className="flex items-center">
         <button
           onClick={handleDecrease}
-          disabled={product.quantity <= 1}
+          disabled={product?.quantity <= 1}
           className="px-2 py-1 border rounded-l bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
         >
           -
         </button>
-        <span className="px-3 text-lg font-semibold">{product.quantity || 0}</span>
+        <span className="px-3 text-lg font-semibold">{product?.quantity || 0}</span>
         <button
           onClick={handleIncrease}
           className="px-2 py-1 border rounded-r bg-gray-200 hover:bg-gray-300"
@@ -61,7 +60,7 @@ const CartCard = ({ product }) => {
 
       {/* Remove Button */}
       <button
-        onClick={() => removeFromCart(product.id)}
+        onClick={() => removeFromCart(product?.id)}
         className="text-red-500 hover:text-red-700 text-xl ml-4"
       >
         ✖
