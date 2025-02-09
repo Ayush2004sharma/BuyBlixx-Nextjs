@@ -9,17 +9,17 @@ import { useRouter } from "next/navigation";
 const ProductCard = ({ product }) => {
   const { addToWishlist } = useProduct();
   const cardRef = useRef(null);
-  const router = useRouter(); // ✅ Navigation
+  const router = useRouter();
+
+  if (!product) return <p>Loading...</p>; // ✅ Prevent crash if product is undefined
 
   const handleAddToWishlist = (e) => {
-    e.stopPropagation(); // Prevents navigation when clicking wishlist button
-
+    e.stopPropagation();
     const wishlistIcon = document.getElementById("wishlist-icon");
     if (!wishlistIcon || !cardRef.current) return;
 
     const iconRect = wishlistIcon.getBoundingClientRect();
     const cardRect = cardRef.current.getBoundingClientRect();
-
     const xMove = iconRect.left - cardRect.left;
     const yMove = iconRect.top - cardRect.top;
 
@@ -56,24 +56,24 @@ const ProductCard = ({ product }) => {
       transition={{ duration: 0.5, ease: "easeOut" }}
       whileHover={{ scale: 1.05 }}
       className="w-full sm:w-56 h-auto sm:h-80 max-w-xs m-2 cursor-pointer"
-      onClick={() => router.push(`/item/${product.id}`)} // ✅ Navigate to Item Page
+      onClick={() => router.push(`/item/${product.id}`)}
     >
       <div className="shadow-2xl border border-gray-200 rounded-2xl overflow-hidden bg-white">
         <div className="p-4 flex flex-col items-center text-center h-full">
           <motion.img
-            src={product.image}
-            alt={product.name}
+            src={product?.image ?? "/fallback-image.jpg"}
+            alt={product?.name ?? "Product"}
             className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-lg mb-3"
             whileHover={{ scale: 1.1 }}
           />
           <h2 className="text-md font-bold text-gray-900 mb-2 truncate">
-            {product.name}
+            {product?.name ?? "Unknown Product"}
           </h2>
           <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-            {product.description}
+            {product?.description ?? "No description available"}
           </p>
           <span className="text-lg font-semibold text-blue-600 mb-3">
-            ₹{product.price}
+            ₹{product?.price ?? "N/A"}
           </span>
           <button
             onClick={handleAddToWishlist}
