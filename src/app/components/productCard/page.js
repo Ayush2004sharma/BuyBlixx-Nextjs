@@ -5,34 +5,38 @@ import { motion } from "framer-motion";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, wishlistIconRef }) => {
   const { addToWishlist } = useProduct();
   const cardRef = useRef(null);
-  const router = useRouter(); // ✅ Navigation
+  const router = useRouter();
 
   const handleAddToWishlist = (e) => {
-    e.stopPropagation(); // Prevents navigation when clicking wishlist button
+    e.stopPropagation(); 
+    if (!wishlistIconRef?.current || !cardRef.current) return;
 
-    const wishlistIcon = document.getElementById("wishlist-icon");
-    if (!wishlistIcon || !cardRef.current) return;
-
-    const iconRect = wishlistIcon.getBoundingClientRect();
+    const iconRect = wishlistIconRef.current.getBoundingClientRect();
     const cardRect = cardRef.current.getBoundingClientRect();
 
     const xMove = iconRect.left - cardRect.left;
     const yMove = iconRect.top - cardRect.top;
 
+    if (document.getElementById(`cloned-${product.id}`)) return;
+
     const clonedCard = cardRef.current.cloneNode(true);
+    clonedCard.id = `cloned-${product.id}`;
     document.body.appendChild(clonedCard);
 
-    clonedCard.style.position = "fixed";
-    clonedCard.style.top = `${cardRect.top}px`;
-    clonedCard.style.left = `${cardRect.left}px`;
-    clonedCard.style.width = `${cardRect.width}px`;
-    clonedCard.style.height = `${cardRect.height}px`;
-    clonedCard.style.zIndex = "1000";
-    clonedCard.style.pointerEvents = "none";
+    Object.assign(clonedCard.style, {
+      position: "fixed",
+      top: `${cardRect.top}px`,
+      left: `${cardRect.left}px`,
+      width: `${cardRect.width}px`,
+      height: `${cardRect.height}px`,
+      zIndex: "1000",
+      pointerEvents: "none",
+    });
 
     gsap.to(clonedCard, {
       x: xMove,
@@ -56,16 +60,19 @@ const ProductCard = ({ product }) => {
       transition={{ duration: 0.5, ease: "easeOut" }}
       whileHover={{ scale: 1.05 }}
       className="w-full sm:w-56 h-auto sm:h-80 max-w-xs m-2 cursor-pointer"
-      onClick={() => router.push(`/item/${product.id}`)} // ✅ Navigate to Item Page
+      onClick={() => router.push(`/item/${product.id}`)}
     >
       <div className="shadow-2xl border border-gray-200 rounded-2xl overflow-hidden bg-white">
         <div className="p-4 flex flex-col items-center text-center h-full">
-          <motion.img
-            src={product.image}
-            alt={product.name}
-            className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-lg mb-3"
-            whileHover={{ scale: 1.1 }}
-          />
+          <motion.div whileHover={{ scale: 1.1 }}>
+            <Image
+              src={product.image}
+              alt={product.name || "Product image"}
+              width={100}
+              height={100}
+              className="w-24 h-24 sm:w-28 sm:h-28 object-cover rounded-lg mb-3"
+            />
+          </motion.div>
           <h2 className="text-md font-bold text-gray-900 mb-2 truncate">
             {product.name}
           </h2>
