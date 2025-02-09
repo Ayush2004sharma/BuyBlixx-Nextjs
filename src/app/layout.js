@@ -1,8 +1,7 @@
 "use client";
+import { ProductProvider } from "./context/productprovider/page";
+ import { CartProvider } from "./context/cartProvider/page";
 
-import { Geist, Geist_Mono } from "next/font/google";
-import { ProductProvider } from "@/app/context/productprovider/page";
-import { CartProvider } from "@/app/context/cartProvider/page"; // ✅ Import CartProvider
 import "./globals.css";
 
 

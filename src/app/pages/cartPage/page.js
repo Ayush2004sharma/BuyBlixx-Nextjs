@@ -3,13 +3,12 @@
 import { useCart } from "@/app/context/cartProvider/page";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import gsap from "gsap";
+
 
 const CartPage = () => {
   const { cart, updateCartQuantity, removeFromCart } = useCart();
   const [shippingMode, setShippingMode] = useState("store");
 
-  // GSAP Animation
 
 
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);

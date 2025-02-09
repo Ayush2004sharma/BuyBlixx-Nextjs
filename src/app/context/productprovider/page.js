@@ -1,5 +1,4 @@
 "use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 const ProductContext = createContext();
@@ -7,13 +6,7 @@ const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [wishlist, setWishlist] = useState(() => {
-    if (typeof window !== "undefined") {
-      return JSON.parse(localStorage.getItem("wishlist")) || [];
-    }
-    return [];
-  });
-
+  const [wishlist, setWishlist] = useState([]);
   const [filters, setFilters] = useState({
     priceRange: 1000,
     selectedBrands: [],
@@ -21,19 +14,9 @@ export const ProductProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const data = await response.json();
-        setProducts(data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    if (typeof window !== "undefined") {
+      setWishlist(JSON.parse(localStorage.getItem("wishlist")) || []);
+    }
   }, []);
 
   useEffect(() => {
@@ -41,6 +24,29 @@ export const ProductProvider = ({ children }) => {
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
     }
   }, [wishlist]);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("https://fakestoreapi.com/products");
+        const data = await response.json();
+        if (isMounted) {
+          setProducts(data);
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchProducts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const addToWishlist = (product) => {
     setWishlist((prev) => (!prev.some((item) => item.id === product.id) ? [...prev, product] : prev));
@@ -52,7 +58,7 @@ export const ProductProvider = ({ children }) => {
 
   const toggleWishlist = (product) => {
     setWishlist((prev) =>
-      prev.some((item) => item.id === product.id)
+      prev.find((item) => item.id === product.id)
         ? prev.filter((item) => item.id !== product.id)
         : [...prev, product]
     );
