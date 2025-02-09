@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-<<<<<<< HEAD
-    "baseUrl": "src",
-=======
     "baseUrl": "./src",
->>>>>>> 5386cca976bc151411fdd1486945f723b9b32fd3
     "paths": {
       "@/*": ["./*"]
     }
