@@ -1,6 +1,11 @@
 "use client";
+import { useCart } from "@/app/context/cartProvider";
 
+
+<<<<<<< HEAD
 import { useCart } from "../../context/cartProvider/page";
+=======
+>>>>>>> 5386cca976bc151411fdd1486945f723b9b32fd3
 import { motion } from "framer-motion";
 import { useCallback } from "react";
 import Image from "next/image";
