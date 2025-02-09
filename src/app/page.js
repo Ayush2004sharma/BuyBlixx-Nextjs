@@ -1,101 +1,58 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { FiMenu } from "react-icons/fi";
+import Navbar from "@/app/components/navbar/page";
+import Sidebar from "@/app/components/sidebar/page";
+import ProductPage from "@/app/pages/productPage/page";
+import Trend from "@/app/components/trend/page";
+import Footer from "@/app/components/footer/page";
+import BrandLogos from "./components/brand/page";
+import SidebarComponent from "./components/sidebarComponent/page";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="flex flex-col min-h-screen">
+      {/* Navbar remains on top */}
+      <div className="w-full fixed top-0 left-0 z-50 bg-white shadow-md">
+        <Navbar />
+      </div>
+
+      {/* Sidebar below Navbar */}
+      <div className="relative">
+        {sidebarOpen && <SidebarComponent isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
+      </div>
+
+      {/* Page Content */}
+      <div className="flex flex-col flex-1 pt-[80px] overflow-y-auto gap-4">
+        <div className="w-full px-4 py-2 mt-4">
+          <Trend />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="w-full px-4 py-2">
+          <BrandLogos />
+        </div>
+        <div className="block md:hidden w-full p-4 bg-gray-200 shadow-md flex items-center justify-between">
+          <span className="text-lg font-bold">Filters</span>
+          <button onClick={toggleSidebar} className="text-xl">
+            <FiMenu />
+          </button>
+        </div>
+        <div className="flex flex-1 gap-4 px-4 py-2">
+          <div className="hidden md:block w-1/4 p-2 ">
+            <Sidebar />
+          </div>
+          <div className="w-full md:w-3/4 p-2">
+            <ProductPage />
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full py-4 text-center">
+        <Footer />
+      </div>
     </div>
   );
 }
