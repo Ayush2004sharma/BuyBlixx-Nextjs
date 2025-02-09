@@ -1,5 +1,6 @@
 "use client";
-import { useCart } from "../context/cartProvider";
+import { useCart } from "@/app/context/cartProvider";
+
 
 import { motion } from "framer-motion";
 import { useCallback } from "react";
