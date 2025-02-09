@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
 
- const CartProvider = ({ children }) => {
+export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
   const updateCartQuantity = (productId, newQuantity) => {
@@ -36,6 +36,5 @@ const CartContext = createContext();
     </CartContext.Provider>
   );
 };
-export default CartProvider;
 
 export const useCart = () => useContext(CartContext);
