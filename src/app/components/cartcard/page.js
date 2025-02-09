@@ -3,20 +3,17 @@
 import { useCart } from "@/app/context/cartProvider";
 import { motion } from "framer-motion";
 
-const CartCard = ({ product }) => {
+const CartCard = ({ product = {} }) => {
   const { updateCartQuantity, removeFromCart } = useCart();
 
-  // ✅ Prevent build-time errors
-  if (!product) return null; // Don't render if no product data
-
   const handleDecrease = () => {
-    if (product.quantity > 1) {
+    if (product?.quantity > 1) {
       updateCartQuantity(product.id, product.quantity - 1);
     }
   };
 
   const handleIncrease = () => {
-    updateCartQuantity(product.id, product.quantity + 1);
+    updateCartQuantity(product?.id, (product?.quantity || 0) + 1);
   };
 
   return (
@@ -27,13 +24,13 @@ const CartCard = ({ product }) => {
       transition={{ duration: 0.4 }}
       className="flex items-center gap-4 p-4 border rounded-lg shadow-md bg-white"
     >
-      {/* Product Image (Prevent Undefined Error) */}
-      <img
-        src={product?.image || "/fallback.jpg"} // ✅ Use a fallback image
-        alt={product?.name || "Product"}
-        className="w-16 h-16 rounded-md object-cover"
+      {/* Product Image with Fallback */}
+      <img 
+        src={product?.image || "/fallback.jpg"} 
+        alt={product?.name || "Product"} 
+        className="w-16 h-16 rounded-md object-cover" 
       />
-
+      
       {/* Product Info */}
       <div className="flex-1">
         <h3 className="text-lg font-semibold">{product?.name || "Unknown Product"}</h3>
@@ -45,7 +42,7 @@ const CartCard = ({ product }) => {
         <button
           onClick={handleDecrease}
           disabled={product?.quantity <= 1}
-          className="px-2 py-1 border rounded-l bg-gray-200 hover:bg-gray-300 disabled:opacity-50"
+          className="px-2 py-1 border rounded-l bg-gray-200 hover:bg-gray-300"
         >
           -
         </button>
