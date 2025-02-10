@@ -67,7 +67,7 @@ const ProductCard = ({ product }) => {
             whileHover={{ scale: 1.1 }}
           />
           <h2 className="text-md font-bold text-gray-900 mb-2 truncate">
-            {product?.name ?? "Unknown Product"}
+            {product?.name}
           </h2>
           <p className="text-sm text-gray-600 mb-3 line-clamp-2">
             {product?.description ?? "No description available"}
