@@ -14,8 +14,8 @@ const ProductPage = () => {
     if (productContainerRef.current) {
       gsap.fromTo(
         productContainerRef.current,
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+        { opacity: 0 },
+        { opacity: 1, duration: 0.5, ease: "power2.out" }
       );
     }
   }, [products]);
@@ -29,21 +29,17 @@ const ProductPage = () => {
     );
   });
 
-  if (loading) {
-    return (
-      <div className="text-center text-xl font-semibold mt-10">
-        Loading products...
-      </div>
-    );
-  }
-
   return (
-    <div className="p-6 border-4 border-pistachio rounded-lg shadow-lg overflow-hidden bg-white relative h-[200vh] mx-auto">
+    <div className="p-6 border-4 border-pistachio rounded-lg shadow-lg bg-white relative mx-auto w-full">
       <h2 className="text-3xl font-extrabold text-gray-800 uppercase tracking-wide mb-6">
         Our Products
       </h2>
 
-      {selectedProduct ? (
+      {loading ? (
+        <div className="text-center text-xl font-semibold mt-10 min-h-[500px] flex items-center justify-center">
+          Loading products...
+        </div>
+      ) : selectedProduct ? (
         // 👉 Show Selected Product Details
         <div className="p-6 border rounded-lg shadow-lg bg-gray-100">
           <button
@@ -64,7 +60,7 @@ const ProductPage = () => {
         // 👉 Show Product Grid
         <div
           ref={productContainerRef}
-          className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 overflow-y-auto h-full scrollbar-hide"
+          className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 min-h-[500px]"
         >
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (

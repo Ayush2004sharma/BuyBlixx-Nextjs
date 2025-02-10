@@ -25,44 +25,30 @@ export const ProductProvider = ({ children }) => {
     }
   }, [wishlist]);
 
+  const fetchProducts = async (category = null) => {
+    setLoading(true);
+    try {
+      const url = category
+        ? `https://fakestoreapi.com/products/category/${category}`
+        : "https://fakestoreapi.com/products";
+      const response = await fetch(url);
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Function specifically for fetching by category
+  const fetchProductsByCategory = (category) => {
+    fetchProducts(category);
+  };
+
   useEffect(() => {
-    let isMounted = true;
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const data = await response.json();
-        if (isMounted) {
-          setProducts(data);
-        }
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
-    };
-
     fetchProducts();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
-
-  const addToWishlist = (product) => {
-    setWishlist((prev) => (!prev.some((item) => item.id === product.id) ? [...prev, product] : prev));
-  };
-
-  const removeFromWishlist = (id) => {
-    setWishlist((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const toggleWishlist = (product) => {
-    setWishlist((prev) =>
-      prev.find((item) => item.id === product.id)
-        ? prev.filter((item) => item.id !== product.id)
-        : [...prev, product]
-    );
-  };
 
   return (
     <ProductContext.Provider
@@ -70,11 +56,24 @@ export const ProductProvider = ({ children }) => {
         products,
         loading,
         wishlist,
-        addToWishlist,
-        removeFromWishlist,
-        toggleWishlist,
+        addToWishlist: (product) => {
+          setWishlist((prev) =>
+            !prev.some((item) => item.id === product.id) ? [...prev, product] : prev
+          );
+        },
+        removeFromWishlist: (id) => {
+          setWishlist((prev) => prev.filter((item) => item.id !== id));
+        },
+        toggleWishlist: (product) => {
+          setWishlist((prev) =>
+            prev.find((item) => item.id === product.id)
+              ? prev.filter((item) => item.id !== product.id)
+              : [...prev, product]
+          );
+        },
         filters,
         setFilters,
+        fetchProductsByCategory, // Exposing fetch by category
       }}
     >
       {children}

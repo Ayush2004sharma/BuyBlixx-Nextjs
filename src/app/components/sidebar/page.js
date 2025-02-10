@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useProduct } from "@/app/context/productprovider/page";
 
 const Sidebar = () => {
-  const { filters, setFilters } = useProduct();
+  const { filters, setFilters, fetchProductsByCategory } = useProduct();
 
   const headerRef = useRef(null);
   const categoryRefs = useRef([]);
@@ -40,14 +40,15 @@ const Sidebar = () => {
       {/* Categories Section */}
       <div className="p-4 bg-blue-100 shadow-md rounded-md mt-4">
         <ul className="space-y-2">
-          {["Clothing", "Electronics", "Home & Living", "Beauty & Health", "Gaming", "Watches"].map(
+          {["electronics", "jewelery", "men's clothing", "women's clothing"].map(
             (category, index) => (
               <li
                 key={index}
                 ref={(el) => (categoryRefs.current[index] = el)}
                 className="cursor-pointer hover:text-blue-500 transition-all duration-300 text-black"
+                onClick={() => fetchProductsByCategory(category)}
               >
-                {category}
+                {category.charAt(0).toUpperCase() + category.slice(1)}
               </li>
             )
           )}
