@@ -9,7 +9,7 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import { useRouter, usePathname } from "next/navigation";
-import Link from "next/link";
+import { FaWallet } from "react-icons/fa6";
 
 const Navbar = () => {
   const router = useRouter();
@@ -161,6 +161,11 @@ const Navbar = () => {
                 className="cursor-pointer hover:text-gray-400"
                 onClick={handleProfileClick}
               />
+              <FaWallet 
+               size={24}
+               id="wallet-icon"
+               className="cursor-pointer hover:text-gray-400"
+               onClick={() => handleNavigation("/components/Wallet")}/>
               <FaHeart
                 size={24}
                 id="wishlist-icon"
@@ -193,6 +198,12 @@ const Navbar = () => {
               onClick={() => handleNavigation("/")}
             >
               Home
+            </li>
+            <li
+              className="text-lg cursor-pointer hover:text-gray-300 transition duration-300 border-b border-gray-300 pb-2"
+              onClick={() => handleNavigation("/components/Wallet")}
+            >
+              Wallet
             </li>
             <li
               className="text-lg cursor-pointer hover:text-gray-300 transition duration-300 border-b border-gray-300 pb-2"
